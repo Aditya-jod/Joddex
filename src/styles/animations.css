@@ -80,8 +80,80 @@
   transform: translateZ(56px) translateY(-8px) rotateZ(6deg);
 }
 
+/* Stronger 3D variant for prominent cards */
+.card-3d-strong { transform-style: preserve-3d; transition: transform 360ms cubic-bezier(.16,.9,.2,1), box-shadow 300ms ease; }
+.card-3d-strong:hover { transform: perspective(1200px) translateZ(14px) rotateX(6deg) rotateY(-14deg) scale(1.06); box-shadow: 0 40px 80px rgba(2,6,23,0.6); }
+.card-3d-strong > .decorative-icon { transform: translateZ(60px); transition: transform 420ms cubic-bezier(.16,.9,.2,1), opacity 380ms ease; }
+.card-3d-strong:hover > .decorative-icon { transform: translateZ(96px) translateY(-8px) rotateZ(-10deg) scale(1.05); opacity: 0.95; }
+.card-3d-strong > .icon-container { transform: translateZ(44px); transition: transform 420ms cubic-bezier(.16,.9,.2,1); }
+.card-3d-strong:hover > .icon-container { transform: translateZ(96px) translateY(-10px) rotateZ(8deg); }
+
+/* Deep-blue full-around shadow for Dashboard Preview */
+.dashboard-preview-shadow {
+  box-shadow:
+    0 30px 60px rgba(0,26,61,0.40),
+    0 -18px 40px rgba(0,26,61,0.16),
+    28px 0 40px rgba(0,26,61,0.12),
+    -28px 0 40px rgba(0,26,61,0.12);
+  border-radius: 16px;
+}
+
+.dashboard-preview-shadow:hover {
+  box-shadow:
+    0 40px 90px rgba(0,26,61,0.48),
+    0 -22px 50px rgba(0,26,61,0.18),
+    34px 0 50px rgba(0,26,61,0.14),
+    -34px 0 50px rgba(0,26,61,0.14);
+  transform: translateY(-4px);
+}
+
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .slide-left, .slide-right, .reveal, .card-tilt { animation-duration: 250ms !important; transition-duration: 200ms !important; }
   .card-tilt::before { display: none; }
 }
+
+/* First-visit full-screen overlay */
+.first-visit-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(0,10,30,0.92) 0%, rgba(0,6,20,0.96) 100%);
+  color: white;
+  padding: 3rem;
+  text-align: center;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.first-visit-overlay .brand {
+  font-weight: 800;
+  font-size: 2.6rem;
+  letter-spacing: -0.02em;
+}
+
+.first-visit-overlay .subtitle {
+  margin-top: 0.75rem;
+  color: rgba(255,255,255,0.9);
+  font-size: 1.05rem;
+}
+
+.first-visit-overlay .enter-btn {
+  margin-top: 1.6rem;
+  background: white;
+  color: #001A3D;
+  padding: 0.85rem 1.6rem;
+  border-radius: 12px;
+  font-weight: 700;
+  box-shadow: 0 12px 30px rgba(2,6,23,0.36);
+}
+
+/* optional small fade animation when overlay dismisses */
+.overlay-fade { transition: opacity 420ms ease, transform 420ms ease; }
+.overlay-fade.hidden { opacity: 0; transform: translateY(-8px) scale(0.995); pointer-events: none; }
+
+/* utility to stagger reveal children using --delay variable */
+.reveal { transition-delay: var(--delay, 0ms); }

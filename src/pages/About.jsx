@@ -60,7 +60,7 @@ export default function AboutPage({ setActivePage }) {
 
         <section id="technical-vision" className="mb-12">
           <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <div className="p-8 md:p-12 bg-gradient-to-br from-[#001A3D] to-[#003A73] text-white">
+            <div className="p-8 md:p-12 bg-[#001A3D] text-white">
               <div className="max-w-5xl mx-auto">
                 <h2 className="text-3xl font-bold mb-4">Technical Vision</h2>
                 <p className="text-gray-100 mb-6 leading-relaxed">Joddex is architected as an API-first, cloud-native service focused on explainability, modularity, and enterprise readiness. Below are the pillars that guide our implementation.</p>

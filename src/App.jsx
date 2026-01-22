@@ -208,6 +208,7 @@ const PricingCard = ({ tier }) => (
 // --- Main App Component ---
 export default function App() {
   const [activePage, setActivePage] = useState('home');
+  const [firstVisit, setFirstVisit] = useState(false);
 
   useEffect(() => {
     if (activePage !== 'home') {
@@ -223,8 +224,55 @@ export default function App() {
     }
   }, [activePage]);
 
+  // First-visit experience and global reveal trigger
+  useEffect(() => {
+    try {
+      const visited = localStorage.getItem('joddex_first_visit_v1');
+      if (!visited) {
+        setFirstVisit(true);
+        localStorage.setItem('joddex_first_visit_v1', '1');
+      } else {
+        // not first visit, trigger quick reveals
+        setTimeout(() => triggerGlobalReveal(), 120);
+      }
+    } catch (e) {
+      // ignore storage errors
+      setTimeout(() => triggerGlobalReveal(), 120);
+    }
+  }, []);
+
+  function triggerGlobalReveal() {
+    const els = Array.from(document.querySelectorAll('.reveal'));
+    els.forEach((el, i) => {
+      el.style.setProperty('--delay', `${i * 120}ms`);
+      setTimeout(() => el.classList.add('in-view'), 80 + i * 120);
+    });
+  }
+
+  function handleEnterSite() {
+    // fade overlay then trigger reveals
+    const ov = document.getElementById('first-visit-overlay');
+    if (ov) {
+      ov.classList.add('hidden');
+      setTimeout(() => setFirstVisit(false), 420);
+    } else {
+      setFirstVisit(false);
+    }
+    setTimeout(() => triggerGlobalReveal(), 460);
+  }
+
   return (
     <div className="min-h-screen bg-white text-[#001A3D] selection:bg-blue-100 selection:text-[#001A3D] font-sans antialiased">
+      {firstVisit && (
+        <div id="first-visit-overlay" className="first-visit-overlay overlay-fade">
+          <div>
+            <div className="brand">JODDEX</div>
+            <div className="subtitle">Beyond Matching. Real Intelligence.</div>
+            <button onClick={handleEnterSite} className="enter-btn">Enter site</button>
+          </div>
+        </div>
+      )}
+
       <Navbar activePage={activePage} setActivePage={setActivePage} />
       
       {activePage === 'about' ? (
@@ -237,43 +285,49 @@ export default function App() {
 
           {/* Products Section - Bento Grid Layout */}
           <section id="products" className="py-24 px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-            <div className="max-w-xl">
-              <h2 className="text-4xl font-bold tracking-tight mb-4 text-[#001A3D]">Engineered for Precision</h2>
-              <p className="text-gray-500 font-medium text-lg">Legacy systems rely on simple strings. Joddex builds a cognitive understanding of career trajectories.</p>
+            <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+              <div className="max-w-xl">
+                <h2 className="text-4xl font-bold tracking-tight mb-4 text-[#001A3D]">Engineered for Precision</h2>
+                <p className="text-gray-500 font-medium text-lg">Legacy systems rely on simple strings. Joddex builds a cognitive understanding of career trajectories.</p>
+              </div>
+              <button className="text-[13px] font-bold text-[#001A3D] border-b border-[#001A3D] pb-0.5 flex items-center group hover:opacity-70 transition-opacity">
+                Explore Documentation <ArrowUpRight className="ml-2 w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </button>
             </div>
-            <button className="text-[13px] font-bold text-[#001A3D] border-b border-[#001A3D] pb-0.5 flex items-center group hover:opacity-70 transition-opacity">
-              Explore Documentation <ArrowUpRight className="ml-2 w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </button>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <FeatureCard 
-              icon={Fingerprint}
-              title="Identity Neutrality"
-              description="Automated obfuscation of demographic markers. Our engine strips bias before the resume ever hits the hiring manager's dashboard."
-              className="md:col-span-1"
-            />
-            <FeatureCard 
-              icon={Globe}
-              title="Global Context Engine"
-              description="Understands educational equivalence across 180+ countries. It knows that a GPA from a specific university in Berlin matches your requirements."
-              className="md:col-span-2"
-            />
-            <FeatureCard 
-              icon={Cpu}
-              title="Neural Matching"
-              description="Matches candidates based on skill adjacency. A Java developer can be a great C# hire; Joddex knows why."
-              className="md:col-span-2"
-            />
-            <FeatureCard 
-              icon={Lock}
-              title="Secure Pipeline"
-              description="Enterprise-grade data encryption for every candidate file. SOC2 Type II ready architecture."
-              className="md:col-span-1"
-            />
-          </div>
-        </section>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <FeatureCard 
+                icon={Fingerprint}
+                title="Identity Neutrality"
+                description="Automated obfuscation of demographic markers. Our engine strips bias before the resume ever hits the hiring manager's dashboard."
+                className="md:col-span-1"
+                reveal="left"
+                intensity="strong"
+              />
+              <FeatureCard 
+                icon={Globe}
+                title="Global Context Engine"
+                description="Understands educational equivalence across 180+ countries. It knows that a GPA from a specific university in Berlin matches your requirements."
+                className="md:col-span-2"
+                reveal="up"
+              />
+              <FeatureCard 
+                icon={Cpu}
+                title="Neural Matching"
+                description="Matches candidates based on skill adjacency. A Java developer can be a great C# hire; Joddex knows why."
+                className="md:col-span-2"
+                reveal="right"
+              />
+              <FeatureCard 
+                icon={Lock}
+                title="Secure Pipeline"
+                description="Enterprise-grade data encryption for every candidate file. SOC2 Type II ready architecture."
+                className="md:col-span-1"
+                reveal="right"
+                intensity="strong"
+              />
+            </div>
+          </section>
 
         {/* About Section - Split Layout with Enhanced Visual */}
         <section id="about" className="py-32 bg-[#F9FAFB] border-y border-gray-100 relative overflow-hidden">
@@ -313,7 +367,7 @@ export default function App() {
             <div className="relative group">
               <div className="absolute -inset-4 bg-gradient-to-tr from-blue-100 to-gray-100 rounded-[2.5rem] blur-xl opacity-70 group-hover:opacity-90 transition-opacity duration-500"></div>
 
-              <div className="relative p-8 bg-white rounded-2xl border border-gray-100 shadow-xl">
+              <div className="relative p-8 bg-white rounded-2xl border border-gray-100 dashboard-preview-shadow">
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h3 className="text-lg font-bold text-[#001A3D]">Dashboard Preview</h3>

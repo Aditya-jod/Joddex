@@ -1,23 +1,25 @@
 /* Slow, smooth entrance animations and scroll reveal */
 
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-72px); }
-  65% { opacity: 0.85; transform: translateX(-18px); }
-  to { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translateX(-92px) translateZ(0); }
+  65% { opacity: 0.98; transform: translateX(-8px) translateZ(10px); }
+  to { opacity: 1; transform: translateX(0) translateZ(20px); }
 }
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(72px); }
-  65% { opacity: 0.85; transform: translateX(18px); }
-  to { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translateX(92px) translateZ(0); }
+  65% { opacity: 0.98; transform: translateX(8px) translateZ(10px); }
+  to { opacity: 1; transform: translateX(0) translateZ(20px); }
 }
 
-/* Hero lines: very slow and smooth so motion is easy to follow */
-.slide-left { animation: slideInLeft 3000ms cubic-bezier(.22,1,.36,1) forwards; animation-delay: var(--delay, 0ms); }
-.slide-right { animation: slideInRight 3000ms cubic-bezier(.22,1,.36,1) forwards; animation-delay: var(--delay, 720ms); }
+/* Hero lines: animate when element is in-view */
+.slide-left { opacity: 0; transform: translateX(-48px); will-change: transform, opacity; }
+.slide-right { opacity: 0; transform: translateX(48px); will-change: transform, opacity; }
+.slide-left.in-view { animation: slideInLeft 900ms cubic-bezier(.22,1,.36,1) forwards; animation-delay: var(--delay, 120ms); }
+.slide-right.in-view { animation: slideInRight 900ms cubic-bezier(.22,1,.36,1) forwards; animation-delay: var(--delay, 220ms); }
 
 /* Reveal on scroll: long, gently easing transitions */
-.reveal { opacity: 0; transform: translateY(48px); transition: transform 2800ms cubic-bezier(.22,1,.36,1), opacity 2800ms cubic-bezier(.22,1,.36,1); }
+.reveal { opacity: 0; transform: translateY(48px); transition: transform 900ms cubic-bezier(.22,1,.36,1), opacity 900ms cubic-bezier(.22,1,.36,1); }
 .reveal.in-view { opacity: 1; transform: translateY(0); }
 
 .reveal-left { transform: translateX(-48px); }
@@ -33,15 +35,17 @@
 :focus { outline: none; }
 
 /* Card tilt and cursor-follow glow */
-.card-tilt { position: relative; transform-origin: center; transition: transform 1100ms cubic-bezier(.22,1,.36,1), box-shadow 1100ms cubic-bezier(.22,1,.36,1); will-change: transform; }
+:root { --mx: 50%; --my: 50%; --tiltX: 0; --tiltY: 0; }
+
+.card-tilt { position: relative; transform-origin: center; transition: transform 480ms cubic-bezier(.18,.9,.2,1), box-shadow 480ms cubic-bezier(.18,.9,.2,1); will-change: transform; }
 .card-tilt::before {
   content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
   border-radius: inherit;
-  background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(59,130,246,0.08) 0px, rgba(59,130,246,0.04) 40%, transparent 60%);
-  transition: opacity 900ms cubic-bezier(.22,1,.36,1), background-position 900ms cubic-bezier(.22,1,.36,1);
+  background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(59,130,246,0.14) 0px, rgba(59,130,246,0.06) 40%, transparent 65%);
+  transition: opacity 480ms cubic-bezier(.18,.9,.2,1), background-position 480ms cubic-bezier(.18,.9,.2,1);
   mix-blend-mode: screen;
 }
 
@@ -51,12 +55,13 @@
 /* 3D hover transform for cards */
 .card-3d {
   transform-style: preserve-3d;
+  transform: perspective(1000px) rotateX(calc(var(--tiltY) * 1deg)) rotateY(calc(var(--tiltX) * 1deg)) translateZ(0);
   transition: transform 420ms cubic-bezier(.18,.9,.2,1), box-shadow 340ms ease;
   will-change: transform;
 }
 
 .card-3d:hover {
-  transform: perspective(1100px) translateZ(8px) rotateX(4deg) rotateY(-10deg) scale(1.035);
+  transform: perspective(1100px) translateZ(8px) rotateX(calc(var(--tiltY) * 1deg + 4deg)) rotateY(calc(var(--tiltX) * 1deg - 10deg)) scale(1.035);
   box-shadow: 0 26px 56px rgba(2,6,23,0.5);
 }
 
@@ -81,8 +86,8 @@
 }
 
 /* Stronger 3D variant for prominent cards */
-.card-3d-strong { transform-style: preserve-3d; transition: transform 360ms cubic-bezier(.16,.9,.2,1), box-shadow 300ms ease; }
-.card-3d-strong:hover { transform: perspective(1200px) translateZ(14px) rotateX(6deg) rotateY(-14deg) scale(1.06); box-shadow: 0 40px 80px rgba(2,6,23,0.6); }
+.card-3d-strong { transform-style: preserve-3d; transform: perspective(1100px) rotateX(calc(var(--tiltY) * 1.2deg)) rotateY(calc(var(--tiltX) * 1.2deg)); transition: transform 360ms cubic-bezier(.16,.9,.2,1), box-shadow 300ms ease; }
+.card-3d-strong:hover { transform: perspective(1200px) translateZ(14px) rotateX(calc(6deg + var(--tiltY) * 0.6deg)) rotateY(calc(-14deg + var(--tiltX) * 0.6deg)) scale(1.06); box-shadow: 0 40px 80px rgba(2,6,23,0.6); }
 .card-3d-strong > .decorative-icon { transform: translateZ(60px); transition: transform 420ms cubic-bezier(.16,.9,.2,1), opacity 380ms ease; }
 .card-3d-strong:hover > .decorative-icon { transform: translateZ(96px) translateY(-8px) rotateZ(-10deg) scale(1.05); opacity: 0.95; }
 .card-3d-strong > .icon-container { transform: translateZ(44px); transition: transform 420ms cubic-bezier(.16,.9,.2,1); }
@@ -106,6 +111,24 @@
     -34px 0 50px rgba(0,26,61,0.14);
   transform: translateY(-4px);
 }
+
+/* Floating micro-motion for prominent cards */
+@keyframes floaty {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+.card-3d-strong { animation: floaty 6.8s ease-in-out infinite; }
+
+/* Parallax helpers for decorative elements */
+.parallax { transform: translate3d(calc(var(--tiltX) * -6px), calc(var(--tiltY) * -6px), 0); transition: transform 420ms cubic-bezier(.18,.9,.2,1); }
+
+/* Make decorative icon respond to pointer for layers */
+.card-3d .decorative-icon { transform: translateZ(0) translateX(calc(var(--tiltX) * 6px)) translateY(calc(var(--tiltY) * 6px)); }
+.card-3d-strong .decorative-icon { transform: translateZ(60px) translateX(calc(var(--tiltX) * 10px)) translateY(calc(var(--tiltY) * 10px)); }
+
+/* more pronounced hero highlight using pointer */
+.hero-ambient { background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(59,130,246,0.12), transparent 35%); transition: background-position 360ms linear; }
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {

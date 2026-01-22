@@ -17,7 +17,7 @@ const FeatureCard = ({ icon: Icon, title, description, className = '', variant =
 
   return (
     <div
-      className={`p-8 rounded-3xl ${variantClasses[variant] || variantClasses.default} hover:shadow-xl transition-all duration-500 group relative overflow-hidden border-l-4 ${intensityClass} ${revealClass} ${className}`}
+      className={`p-8 rounded-3xl ${variantClasses[variant] || variantClasses.default} hover:shadow-xl transition-all duration-500 group relative overflow-hidden border-l-4 card-tilt ${intensityClass} ${revealClass} ${className}`}
       style={{ borderLeftColor: FR_BLUE }}
     >
       <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity duration-500 decorative-icon">

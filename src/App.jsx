@@ -144,8 +144,9 @@ const Hero = ({ setActivePage }) => (
       </div>
       
       <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-[#001A3D] mb-8 tracking-[-0.03em] leading-[0.95]">
-        AI that Understands <br />
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-200">
+        <span className="slide-left inline-block" style={{ animationDuration: '900ms', animationDelay: '120ms' }}>AI that Understands</span>
+        <br />
+        <span className="slide-right inline-block text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-200" style={{ animationDuration: '900ms', animationDelay: '220ms' }}>
           Resumes Like Humans.
         </span>
       </h1>
@@ -241,11 +242,55 @@ export default function App() {
     }
   }, []);
 
+  // IntersectionObserver: reveal elements as they enter viewport (works on reload and scroll)
+  useEffect(() => {
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    const selector = '.reveal, .slide-left, .slide-right, .card-3d, .card-3d-strong';
+    document.querySelectorAll(selector).forEach(el => io.observe(el));
+
+    return () => io.disconnect();
+  }, []);
+
+  // Pointer-driven parallax: set CSS variables on root for dramatic motion
+  useEffect(() => {
+    let raf = null;
+    function onPointer(e) {
+      const x = e.clientX ?? (e.touches && e.touches[0] && e.touches[0].clientX) ?? window.innerWidth/2;
+      const y = e.clientY ?? (e.touches && e.touches[0] && e.touches[0].clientY) ?? window.innerHeight/2;
+      const px = (x / window.innerWidth - 0.5) * 2; // -1..1
+      const py = (y / window.innerHeight - 0.5) * 2; // -1..1
+
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        document.documentElement.style.setProperty('--tiltX', (px * 12).toFixed(2));
+        document.documentElement.style.setProperty('--tiltY', (-py * 12).toFixed(2));
+        document.documentElement.style.setProperty('--mx', `${Math.round((px * 50) + 50)}%`);
+        document.documentElement.style.setProperty('--my', `${Math.round(((-py) * 50) + 50)}%`);
+      });
+    }
+
+    window.addEventListener('pointermove', onPointer, { passive: true });
+    return () => {
+      window.removeEventListener('pointermove', onPointer);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
   function triggerGlobalReveal() {
-    const els = Array.from(document.querySelectorAll('.reveal'));
+    const selector = ['.slide-left', '.slide-right', '.reveal', '.card-3d', '.card-3d-strong'].join(', ');
+    const els = Array.from(document.querySelectorAll(selector));
     els.forEach((el, i) => {
-      el.style.setProperty('--delay', `${i * 120}ms`);
-      setTimeout(() => el.classList.add('in-view'), 80 + i * 120);
+      const base = Math.min(i * 90, 1200);
+      el.style.setProperty('--delay', `${base}ms`);
+      setTimeout(() => el.classList.add('in-view'), 60 + base);
     });
   }
 

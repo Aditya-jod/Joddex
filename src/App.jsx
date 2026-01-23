@@ -558,7 +558,7 @@ export default function App() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-8 text-center mt-8 text-sm text-gray-500">© {new Date().getFullYear()} Joddex Labs. All rights reserved.</div>
+        <div className="max-w-7xl mx-auto px-8 text-center mt-8 text-sm text-gray-500">© {new Date().getFullYear()} Joddex. All rights reserved.</div>
       </footer>
     </div>
   );

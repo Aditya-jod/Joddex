@@ -154,53 +154,6 @@ html {
   .card-tilt::before { display: none; }
 }
 
-/* First-visit full-screen overlay */
-.first-visit-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(180deg, rgba(0,10,30,0.92) 0%, rgba(0,6,20,0.96) 100%);
-  color: white;
-  padding: 3rem;
-  text-align: center;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-.first-visit-overlay .brand {
-  font-weight: 800;
-  font-size: 2.6rem;
-  letter-spacing: -0.02em;
-}
-
-.first-visit-overlay .subtitle {
-  margin-top: 0.75rem;
-  color: rgba(255,255,255,0.9);
-  font-size: 1.05rem;
-}
-
-.first-visit-overlay .enter-btn {
-  margin-top: 1.6rem;
-  background: white;
-  color: #001A3D;
-  padding: 0.85rem 1.6rem;
-  border-radius: 12px;
-  font-weight: 700;
-  box-shadow: 0 12px 30px rgba(2,6,23,0.36);
-  transition: transform 0.2s ease;
-}
-
-.first-visit-overlay .enter-btn:hover {
-  transform: scale(1.05);
-}
-
-/* optional small fade animation when overlay dismisses */
-.overlay-fade { transition: opacity 420ms ease, transform 420ms ease; }
-.overlay-fade.hidden { opacity: 0; transform: translateY(-8px) scale(0.995); pointer-events: none; }
-
 /* utility to stagger reveal children using --delay variable */
 .reveal { transition-delay: var(--delay, 0ms); }
 

@@ -278,7 +278,6 @@ const PricingCard = ({ tier }) => (
 // --- Main App Component ---
 export default function App() {
   const [activePage, setActivePage] = useState('home');
-  const [firstVisit, setFirstVisit] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -294,21 +293,9 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // First-visit experience and global reveal trigger
+  // Global reveal trigger
   useEffect(() => {
-    try {
-      const visited = localStorage.getItem('joddex_first_visit_v1');
-      if (!visited) {
-        setFirstVisit(true);
-        localStorage.setItem('joddex_first_visit_v1', '1');
-      } else {
-        // not first visit, trigger quick reveals
-        setTimeout(() => triggerGlobalReveal(), 120);
-      }
-    } catch (e) {
-      // ignore storage errors
-      setTimeout(() => triggerGlobalReveal(), 120);
-    }
+    setTimeout(() => triggerGlobalReveal(), 120);
   }, []);
 
   // IntersectionObserver: reveal elements as they enter viewport (works on reload and scroll)
@@ -373,18 +360,6 @@ export default function App() {
     });
   }
 
-  function handleEnterSite() {
-    // fade overlay then trigger reveals
-    const ov = document.getElementById('first-visit-overlay');
-    if (ov) {
-      ov.classList.add('hidden');
-      setTimeout(() => setFirstVisit(false), 420);
-    } else {
-      setFirstVisit(false);
-    }
-    setTimeout(() => triggerGlobalReveal(), 460);
-  }
-
   return (
     <div className="min-h-screen bg-white text-[#001A3D] selection:bg-blue-100 selection:text-[#001A3D] font-sans antialiased">
       {/* Loading Animation */}
@@ -393,16 +368,6 @@ export default function App() {
           <div className="text-center">
             <div className="w-16 h-16 border-4 border-blue-200 border-t-[#001A3D] rounded-full animate-spin mx-auto mb-4"></div>
             <div className="text-xl font-bold text-[#001A3D]">Loading JODDEX...</div>
-          </div>
-        </div>
-      )}
-
-      {firstVisit && (
-        <div id="first-visit-overlay" className="first-visit-overlay overlay-fade">
-          <div>
-            <div className="brand">JODDEX</div>
-            <div className="subtitle">Beyond Matching. Real Intelligence.</div>
-            <button onClick={handleEnterSite} className="enter-btn">Enter site</button>
           </div>
         </div>
       )}

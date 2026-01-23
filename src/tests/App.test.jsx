@@ -1,2 +1,0 @@
-// Cleared tests
-test('placeholder', () => {})

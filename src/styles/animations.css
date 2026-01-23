@@ -1,31 +1,36 @@
 /* Slow, smooth entrance animations and scroll reveal */
 
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-92px) translateZ(0); }
-  65% { opacity: 0.98; transform: translateX(-8px) translateZ(10px); }
-  to { opacity: 1; transform: translateX(0) translateZ(20px); }
+  from { opacity: 0; transform: translateX(-150vw) translateZ(0) scale(0.8); }
+  65% { opacity: 0.98; transform: translateX(-12px) translateZ(10px) scale(1.05); }
+  to { opacity: 1; transform: translateX(0) translateZ(20px) scale(1); }
 }
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(92px) translateZ(0); }
-  65% { opacity: 0.98; transform: translateX(8px) translateZ(10px); }
-  to { opacity: 1; transform: translateX(0) translateZ(20px); }
+  from { opacity: 0; transform: translateX(150vw) translateZ(0) scale(0.8); }
+  65% { opacity: 0.98; transform: translateX(12px) translateZ(10px) scale(1.05); }
+  to { opacity: 1; transform: translateX(0) translateZ(20px) scale(1); }
 }
 
 /* Hero lines: animate when element is in-view */
-.slide-left { opacity: 0; transform: translateX(-48px); will-change: transform, opacity; }
-.slide-right { opacity: 0; transform: translateX(48px); will-change: transform, opacity; }
-.slide-left.in-view { animation: slideInLeft 900ms cubic-bezier(.22,1,.36,1) forwards; animation-delay: var(--delay, 120ms); }
-.slide-right.in-view { animation: slideInRight 900ms cubic-bezier(.22,1,.36,1) forwards; animation-delay: var(--delay, 220ms); }
+.slide-left { opacity: 0; transform: translateX(-100vw); will-change: transform, opacity; animation: slideInLeft 4000ms cubic-bezier(.22,1,.36,1) forwards; animation-delay: 200ms; }
+.slide-right { opacity: 0; transform: translateX(100vw); will-change: transform, opacity; animation: slideInRight 4000ms cubic-bezier(.22,1,.36,1) forwards; animation-delay: 400ms; }
+.slide-left.in-view { animation: slideInLeft 4000ms cubic-bezier(.22,1,.36,1) forwards; animation-delay: var(--delay, 200ms); }
+.slide-right.in-view { animation: slideInRight 4000ms cubic-bezier(.22,1,.36,1) forwards; animation-delay: var(--delay, 400ms); }
 
 /* Reveal on scroll: long, gently easing transitions */
-.reveal { opacity: 0; transform: translateY(48px); transition: transform 900ms cubic-bezier(.22,1,.36,1), opacity 900ms cubic-bezier(.22,1,.36,1); }
-.reveal.in-view { opacity: 1; transform: translateY(0); }
+.reveal { opacity: 0; transform: translateY(48px) scale(0.9); transition: transform 4000ms cubic-bezier(.22,1,.36,1), opacity 4000ms cubic-bezier(.22,1,.36,1); animation: revealIn 4000ms cubic-bezier(.22,1,.36,1) forwards; animation-delay: var(--delay, 600ms); }
+.reveal.in-view { opacity: 1; transform: translateY(0) scale(1); }
 
-.reveal-left { transform: translateX(-48px); }
+@keyframes revealIn {
+  0% { opacity: 0; transform: translateY(48px) scale(0.9); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.reveal-left { transform: translateX(-100vw); }
 .reveal-left.in-view { transform: translateX(0); }
 
-.reveal-right { transform: translateX(48px); }
+.reveal-right { transform: translateX(100vw); }
 .reveal-right.in-view { transform: translateX(0); }
 
 /* small helper to stagger children using inline --delay */
@@ -33,6 +38,11 @@
 
 /* subtle focus ring for keyboard users */
 :focus { outline: none; }
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
 
 /* Card tilt and cursor-follow glow */
 :root { --mx: 50%; --my: 50%; --tiltX: 0; --tiltY: 0; }
@@ -58,11 +68,12 @@
   transform: perspective(1000px) rotateX(calc(var(--tiltY) * 1deg)) rotateY(calc(var(--tiltX) * 1deg)) translateZ(0);
   transition: transform 420ms cubic-bezier(.18,.9,.2,1), box-shadow 340ms ease;
   will-change: transform;
+  box-shadow: 0 4px 20px rgba(2,6,23,0.08);
 }
 
 .card-3d:hover {
   transform: perspective(1100px) translateZ(8px) rotateX(calc(var(--tiltY) * 1deg + 4deg)) rotateY(calc(var(--tiltX) * 1deg - 10deg)) scale(1.035);
-  box-shadow: 0 26px 56px rgba(2,6,23,0.5);
+  box-shadow: 0 26px 56px rgba(2,6,23,0.5), 0 0 40px rgba(59,130,246,0.1);
 }
 
 /* Depth effects for card children */
@@ -77,7 +88,7 @@
 }
 
 .card-3d:hover .decorative-icon {
-  transform: translateZ(44px) translateY(-6px) translateX(6px) rotateZ(-8deg) scale(1.03);
+  transform: translateZ(44px) translateY(-6px) translateX(6px) rotateZ(-8deg) scale(1.1);
   opacity: 0.9;
 }
 
@@ -86,10 +97,10 @@
 }
 
 /* Stronger 3D variant for prominent cards */
-.card-3d-strong { transform-style: preserve-3d; transform: perspective(1100px) rotateX(calc(var(--tiltY) * 1.2deg)) rotateY(calc(var(--tiltX) * 1.2deg)); transition: transform 360ms cubic-bezier(.16,.9,.2,1), box-shadow 300ms ease; }
-.card-3d-strong:hover { transform: perspective(1200px) translateZ(14px) rotateX(calc(6deg + var(--tiltY) * 0.6deg)) rotateY(calc(-14deg + var(--tiltX) * 0.6deg)) scale(1.06); box-shadow: 0 40px 80px rgba(2,6,23,0.6); }
+.card-3d-strong { transform-style: preserve-3d; transform: perspective(1100px) rotateX(calc(var(--tiltY) * 1.2deg)) rotateY(calc(var(--tiltX) * 1.2deg)); transition: transform 360ms cubic-bezier(.16,.9,.2,1), box-shadow 300ms ease; box-shadow: 0 8px 32px rgba(2,6,23,0.12); }
+.card-3d-strong:hover { transform: perspective(1200px) translateZ(14px) rotateX(calc(6deg + var(--tiltY) * 0.6deg)) rotateY(calc(-14deg + var(--tiltX) * 0.6deg)) scale(1.06); box-shadow: 0 40px 80px rgba(2,6,23,0.6), 0 0 60px rgba(59,130,246,0.15); }
 .card-3d-strong > .decorative-icon { transform: translateZ(60px); transition: transform 420ms cubic-bezier(.16,.9,.2,1), opacity 380ms ease; }
-.card-3d-strong:hover > .decorative-icon { transform: translateZ(96px) translateY(-8px) rotateZ(-10deg) scale(1.05); opacity: 0.95; }
+.card-3d-strong:hover > .decorative-icon { transform: translateZ(96px) translateY(-8px) rotateZ(-10deg) scale(1.15); opacity: 0.95; }
 .card-3d-strong > .icon-container { transform: translateZ(44px); transition: transform 420ms cubic-bezier(.16,.9,.2,1); }
 .card-3d-strong:hover > .icon-container { transform: translateZ(96px) translateY(-10px) rotateZ(8deg); }
 
@@ -129,6 +140,13 @@
 
 /* more pronounced hero highlight using pointer */
 .hero-ambient { background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(59,130,246,0.12), transparent 35%); transition: background-position 360ms linear; }
+
+/* Tooltip for cards */
+.tooltip {
+  z-index: 10;
+  font-size: 12px;
+  font-weight: 500;
+}
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
@@ -172,6 +190,11 @@
   border-radius: 12px;
   font-weight: 700;
   box-shadow: 0 12px 30px rgba(2,6,23,0.36);
+  transition: transform 0.2s ease;
+}
+
+.first-visit-overlay .enter-btn:hover {
+  transform: scale(1.05);
 }
 
 /* optional small fade animation when overlay dismisses */
@@ -180,3 +203,71 @@
 
 /* utility to stagger reveal children using --delay variable */
 .reveal { transition-delay: var(--delay, 0ms); }
+
+/* Blinking effect for the period */
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.blink { animation: blink 2s infinite; }
+
+/* Floating animation for proof badges */
+@keyframes gentle-float-1 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-40px); }
+}
+
+@keyframes gentle-float-2 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-30px); }
+}
+
+@keyframes gentle-float-3 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-50px); }
+}
+
+@keyframes gentle-float-4 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-35px); }
+}
+
+@keyframes gentle-float-5 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-45px); }
+}
+
+@keyframes gentle-float-6 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-25px); }
+}
+
+.proof-badge {
+  opacity: 0;
+  transform: scale(0.8);
+  animation-fill-mode: forwards;
+}
+
+.proof-badge.appear {
+  animation: badge-appear 1s ease-out forwards, gentle-float 5s ease-in-out infinite 1s;
+}
+
+.float-1 { animation: badge-appear 1s ease-out forwards, gentle-float-1 5s ease-in-out infinite 1s; }
+.float-2 { animation: badge-appear 1s ease-out forwards, gentle-float-2 6s ease-in-out infinite 1s; }
+.float-3 { animation: badge-appear 1s ease-out forwards, gentle-float-3 4s ease-in-out infinite 1s; }
+.float-4 { animation: badge-appear 1s ease-out forwards, gentle-float-4 5.5s ease-in-out infinite 1s; }
+.float-5 { animation: badge-appear 1s ease-out forwards, gentle-float-5 4.5s ease-in-out infinite 1s; }
+.float-6 { animation: badge-appear 1s ease-out forwards, gentle-float-6 6.5s ease-in-out infinite 1s; }
+
+@keyframes badge-appear {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.delay-0 { animation-delay: 0s; }
+.delay-1 { animation-delay: 1s; }
+.delay-2 { animation-delay: 2s; }
+.delay-3 { animation-delay: 3s; }
+.delay-4 { animation-delay: 4s; }
+.delay-5 { animation-delay: 5s; }

@@ -1,2 +1,0 @@
-// Cleared icon exports
-export {}

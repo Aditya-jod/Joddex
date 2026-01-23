@@ -36,13 +36,13 @@ export default function AboutPage({ setActivePage }) {
             </div>
 
             <div className="mt-4 flex gap-4">
-              <button onClick={() => setActivePage && setActivePage('home')} className="px-6 py-3 bg-[#001A3D] text-white rounded-xl font-semibold shadow">Back to Home</button>
-              <a href="#technical-vision" onClick={() => setActivePage && setActivePage('about')} className="px-6 py-3 border border-gray-200 rounded-xl bg-white text-[#001A3D] font-semibold">View Technical Vision</a>
+              <button onClick={() => setActivePage && setActivePage('home')} className="px-6 py-3 bg-[#001A3D] text-white rounded-xl font-semibold shadow hover:bg-blue-700 transition-colors">Back to Home</button>
+              <a href="#technical-vision" onClick={() => setActivePage && setActivePage('about')} className="px-6 py-3 border border-gray-200 rounded-xl bg-white text-[#001A3D] font-semibold hover:bg-gray-50 transition-colors">View Technical Vision</a>
             </div>
           </div>
 
-          <div>
-            <div className="mb-6">
+          <div className="space-y-6">
+            <div>
               <h3 className="text-lg font-semibold mb-4">By the numbers</h3>
               <div className="grid grid-cols-3 gap-4">
                 <Stat value="10k+" label="Resumes / hr" />
@@ -51,9 +51,11 @@ export default function AboutPage({ setActivePage }) {
               </div>
             </div>
 
-            <div className="mt-6">
+            <div>
               <h3 className="text-lg font-semibold mb-4">Team & Collaboration</h3>
-              <p className="text-gray-600">Small multidisciplinary team of ML researchers, backend engineers, and designers. We're actively seeking partners for design feedback and enterprise trials.</p>
+              <div className="p-6 bg-white rounded-2xl shadow-md border border-gray-100">
+                <p className="text-gray-600">Small multidisciplinary team of ML researchers, backend engineers, and designers. We're actively seeking partners for design feedback and enterprise trials.</p>
+              </div>
             </div>
           </div>
         </div>

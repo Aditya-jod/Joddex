@@ -155,7 +155,7 @@ const Navbar = ({ activePage, setActivePage }) => {
 
 // --- Hero Section ---
 const Hero = ({ setActivePage, scrollY }) => (
-  <section className="relative pt-48 pb-32 px-6 lg:px-8 overflow-visible bg-white">
+  <section className="relative pt-48 pb-32 px-6 lg:px-8 overflow-hidden bg-white">
     {/* Technical Background Pattern - Parallax */}
     <div 
       className="absolute inset-0 z-0 opacity-[0.03]" 
@@ -169,11 +169,11 @@ const Hero = ({ setActivePage, scrollY }) => (
     
     {/* Ambient Glows - Parallax */}
     <div 
-      className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-blue-100/40 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 -z-10 pointer-events-none"
-      style={{ transform: `translateY(${scrollY * -0.2}px) translateX(33.333%) scale(${1 + scrollY * 0.0001})` }}
+      className="absolute top-0 right-0 w-[30vw] max-w-[400px] h-[30vw] max-h-[400px] bg-blue-100/40 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4 -z-10 pointer-events-none"
+      style={{ transform: `translateY(${scrollY * -0.2}px) translateX(25%) scale(${1 + scrollY * 0.0001})` }}
     ></div>
     <div 
-      className="absolute bottom-0 left-0 w-[40vw] h-[40vw] bg-gray-100/60 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4 -z-10 pointer-events-none"
+      className="absolute bottom-0 left-0 w-[25vw] max-w-[300px] h-[25vw] max-h-[300px] bg-gray-100/60 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4 -z-10 pointer-events-none"
       style={{ transform: `translateY(${scrollY * 0.1}px) translateX(-25%) scale(${1 + scrollY * 0.00005})` }}
     ></div>
 

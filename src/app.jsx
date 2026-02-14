@@ -25,6 +25,7 @@ import {
 import FeatureCard from './components/feature-card';
 import AboutPage from './pages/about';
 import './styles/animations.css';
+import AnimatedBG from './components/animated-bg';
 
 // --- Theme Constants ---
 const PALETTE = {
@@ -406,7 +407,9 @@ export default function App() {
   const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-black text-gray-100 selection:bg-gray-800 selection:text-white' : 'bg-white text-[#001A3D] selection:bg-blue-100 selection:text-[#001A3D]'} font-sans antialiased`}>
+    <div className={`relative z-10 min-h-screen ${theme === 'dark' ? 'bg-black text-gray-100 selection:bg-gray-800 selection:text-white' : 'bg-white text-[#001A3D] selection:bg-blue-100 selection:text-[#001A3D]'} font-sans antialiased`}>
+      {/* Animated Background */}
+      <AnimatedBG />
       {/* Loading Animation */}
       {isLoading && (
         <div className={`fixed inset-0 z-50 flex items-center justify-center ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
